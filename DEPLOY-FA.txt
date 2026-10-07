@@ -1,0 +1,13 @@
+مراحل بسیار کوتاه:
+1- فایل‌ها را در GitHub Private Repository قرار دهید.
+2- Vercel > Add New Project > Import Git Repository.
+3- در Storage/Marketplace یک PostgreSQL وصل کنید تا DATABASE_URL ساخته شود.
+4- در Storage یک Vercel Blob Store با حالت Private بسازید و به Project وصل کنید.
+5- Settings > Environment Variables:
+   SESSION_SECRET = یک متن طولانی تصادفی
+   ADMIN_PASSWORD = رمز مدیر
+6- Deploy / Redeploy.
+7- لینک *.vercel.app را روی گوشی معلم و سیستم مدیر باز کنید.
+
+مدیر: admin
+رمز: همان ADMIN_PASSWORD
