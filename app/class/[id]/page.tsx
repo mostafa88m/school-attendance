@@ -31,21 +31,28 @@ export default async function ClassPage({params}:{params:Promise<{id:string}>}) 
   return <><Header user={user}/><main>
     <div className="head"><div><h1>{cls.name}</h1><p>{shamsi()} — {students.length} دانش‌آموز</p></div>
       <div className="actions no-print">
-        <Link className="btn" href={`/manage?classId=${classId}#student`}>➕ ثبت دانش‌آموز</Link>
+        <Link className="btn primary" href={`/manage?classId=${classId}#student`}>＋ ثبت دانش‌آموز</Link>
         {user.role==="admin" && <Link className="btn" href="/dashboard">همه کلاس‌ها</Link>}
         <PrintButtons pdf={user.role==="admin"}/>
       </div>
     </div>
+
     <form action="/api/attendance" method="post">
       <input type="hidden" name="classId" value={classId}/>
       <div className="students">
       {items.map((s:any)=>{
         const st=map.get(s.id)||"present";
         return <div className="student" key={s.id}>
-          <div className="identity">{s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}<strong>{s.name}</strong></div>
-          <div className="choice">
-            <label><input type="radio" name={`s_${s.id}`} value="present" defaultChecked={st==="present"}/><span className="present">✓ حاضر</span></label>
-            <label><input type="radio" name={`s_${s.id}`} value="absent" defaultChecked={st==="absent"}/><span className="absent">✕ غایب</span></label>
+          <div className="identity">
+            {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}
+            <div className="identityMeta"><strong>{s.name}</strong><small>{cls.name}</small></div>
+          </div>
+          <div className="actions">
+            <div className="choice">
+              <label><input type="radio" name={`s_${s.id}`} value="present" defaultChecked={st==="present"}/><span className="present">✓ حاضر</span></label>
+              <label><input type="radio" name={`s_${s.id}`} value="absent" defaultChecked={st==="absent"}/><span className="absent">✕ غایب</span></label>
+            </div>
+            <Link className="btn no-print" href={`/edit/student/${s.id}`}>ویرایش</Link>
           </div>
         </div>
       })}

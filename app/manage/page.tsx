@@ -33,10 +33,11 @@ export default async function Manage({searchParams}:{searchParams:Promise<{class
     : [];
 
   return <><Header user={user}/><main>
-    <div className="head"><div><h1>{user.role==="admin"?"مدیریت سامانه":"ثبت دانش‌آموز"}</h1><p>{user.role==="teacher"?"فقط برای کلاس خودتان":"تعریف کلاس، معلم و دانش‌آموز"}</p></div><Link className="btn no-print" href={user.role==="teacher"?`/class/${user.classId}`:"/dashboard"}>بازگشت</Link></div>
+    <div className="head"><div><h1>{user.role==="admin"?"مدیریت سامانه":"مدیریت دانش‌آموزان کلاس"}</h1><p>{user.role==="teacher"?"ثبت و ویرایش دانش‌آموزان کلاس خودتان":"تعریف کلاس، معلم و دانش‌آموز"}</p></div>
+      <Link className="btn no-print" href={user.role==="teacher"?`/class/${user.classId}`:"/dashboard"}>بازگشت</Link></div>
 
     {user.role==="admin" && <section className="box section">
-      <h2>افزودن کلاس</h2>
+      <h2>افزودن کلاس جدید</h2><p className="sectionDesc">برای هر پایه می‌توانید بیش از یک کلاس تعریف کنید.</p>
       <form action="/api/classes" method="post" className="formGrid">
         <div><label>نام کلاس</label><input name="name" placeholder="مثلاً اول الف" required/></div>
         <div><label>پایه</label><select name="grade">{[1,2,3,4,5,6].map(x=><option key={x}>{x}</option>)}</select></div>
@@ -45,7 +46,7 @@ export default async function Manage({searchParams}:{searchParams:Promise<{class
     </section>}
 
     {user.role==="admin" && <section className="box section">
-      <h2>تعریف معلم</h2>
+      <h2>معلمان</h2><p className="sectionDesc">حساب معلم بسازید یا اطلاعات و کلاس او را ویرایش کنید.</p>
       <form action="/api/teachers" method="post" className="formGrid">
         <div><label>نام معلم</label><input name="name" required/></div>
         <div><label>نام کاربری</label><input name="username" required/></div>
@@ -53,11 +54,13 @@ export default async function Manage({searchParams}:{searchParams:Promise<{class
         <div><label>کلاس</label><select name="classId">{classes.map((c:any)=><option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
         <button className="primary">ایجاد حساب معلم</button>
       </form>
-      {teachers.length>0 && <table className="table"><tbody>{teachers.map((t:any)=><tr key={t.id}><td>{t.name}</td><td>{t.username}</td><td>{t.class_name||"-"}</td></tr>)}</tbody></table>}
+      {teachers.length>0 && <div className="tableWrap"><table className="table"><thead><tr><th>نام معلم</th><th>نام کاربری</th><th>کلاس</th><th>عملیات</th></tr></thead><tbody>
+        {teachers.map((t:any)=><tr key={t.id}><td>{t.name}</td><td>{t.username}</td><td>{t.class_name||"-"}</td><td><Link className="btn" href={`/edit/teacher/${t.id}`}>ویرایش</Link></td></tr>)}
+      </tbody></table></div>}
     </section>}
 
     <section className="box section" id="student">
-      <h2>ثبت دانش‌آموز</h2>
+      <h2>ثبت دانش‌آموز</h2><p className="sectionDesc">نام، کلاس و عکس دانش‌آموز را ثبت کنید.</p>
       <form action="/api/students" method="post" encType="multipart/form-data" className="formGrid">
         <div><label>نام و نام خانوادگی</label><input name="name" required/></div>
         <div><label>کلاس</label><select name="classId" defaultValue={allowedClassId||undefined} disabled={user.role==="teacher"}>
@@ -69,9 +72,11 @@ export default async function Manage({searchParams}:{searchParams:Promise<{class
     </section>
 
     <section>
-      <h2>دانش‌آموزان</h2>
+      <div className="head"><div><h1 style={{fontSize:20}}>دانش‌آموزان</h1><p>{withUrls.length} دانش‌آموز ثبت شده</p></div></div>
       <div className="photoGrid">{withUrls.map((s:any)=><div className="studentMini" key={s.id}>
-        {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}<div><b>{s.name}</b><div className="muted">{s.class_name}</div></div>
+        {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}
+        <div><b>{s.name}</b><div className="muted">{s.class_name}</div></div>
+        <Link className="btn editMini" href={`/edit/student/${s.id}`}>ویرایش</Link>
       </div>)}</div>
     </section>
   </main></>;
