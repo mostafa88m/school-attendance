@@ -60,7 +60,7 @@ export default async function Manage({
     ? await sql`SELECT u.*,c.name class_name FROM users u LEFT JOIN classes c ON c.id=u.class_id WHERE u.role='teacher' ORDER BY u.name`
     : [];
 
-  return <><Header user={user}/><main>
+  return <><Header user={user}/><main className="appMain">
     <div className="head">
       <div>
         <h1>{user.role==="admin"?"مدیریت سامانه":"مدیریت دانش‌آموزان کلاس"}</h1>

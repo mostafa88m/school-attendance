@@ -16,7 +16,7 @@ export default async function Dashboard() {
     redirect(`/class/${user.classId}`);
   }
   if (user.role === "teacher") {
-    return <><Header user={user}/><main><div className="empty">هنوز کلاسی برای شما تعیین نشده است.</div></main></>;
+    return <><Header user={user}/><main className="appMain"><div className="empty">هنوز کلاسی برای شما تعیین نشده است.</div></main></>;
   }
 
   const classes = await sql`SELECT * FROM classes ORDER BY grade,name`;
@@ -57,7 +57,7 @@ export default async function Dashboard() {
       <div className="actions no-print"><Link className="btn primary" href="/manage">⚙ مدیریت سامانه</Link></div>
     </div>
 
-    <AbsenceLegend/><div className="grid">
+    <AbsenceLegend/><div className="grid professionalGrid">
       {cards.map(({c,students,present,absent,recs})=><section className="card" key={c.id}>
         <div className="cardTop"><div><h2>{c.name}</h2><span className="muted">پایه {c.grade}</span></div>
           <Link className="btn soft" href={`/class/${c.id}`}>مشاهده کلاس</Link></div>

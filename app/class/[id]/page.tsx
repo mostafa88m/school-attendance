@@ -39,7 +39,7 @@ export default async function ClassPage({params}:{params:Promise<{id:string}>}) 
   const map=new Map(recs.map((r:any)=>[r.student_id,r.status]));
   const items=await Promise.all(students.map(async(s:any)=>({...s,photoUrl:await signedPhotoUrl(s.photo_path)})));
 
-  return <><Header user={user}/><main>
+  return <><Header user={user}/><main className="appMain">
     <div className="head"><div><h1>{cls.name}</h1><p>{shamsi()} — {students.length} دانش‌آموز</p></div>
       <div className="actions no-print">
         <Link className="btn primary" href={`/manage?classId=${classId}#student`}>＋ ثبت دانش‌آموز</Link>

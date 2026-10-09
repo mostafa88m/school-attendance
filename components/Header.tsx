@@ -8,7 +8,7 @@ export default function Header({ user }: { user: SessionUser }) {
     <header className="topbar no-print">
       <Link href="/dashboard" className="brandWrap">
         <div className="brandIcon">✓</div>
-        <div className="brandText"><b>سامانه حضور و غیاب</b><small>مدرسه ابتدایی</small></div>
+        <div className="brandText"><b>مدرسه شهدای نوده</b><small>مدرسه ابتدایی</small></div>
       </Link>
       <nav>
         <div className="userChip"><div className="userDot">{initials}</div><span>{user.name}</span></div>
