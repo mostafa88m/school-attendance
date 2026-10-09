@@ -54,10 +54,11 @@ export default async function ClassPage({params}:{params:Promise<{id:string}>}) 
       <div className="students">
       {items.map((s:any)=>{
         const st=map.get(s.id)||"present";
-        return const level=absenceLevel(Number(s.absence_count||0)); return <div className={`student attendanceRisk ${level}`} key={s.id}>
+        const level=absenceLevel(Number(s.absence_count||0));
+        return <div className={`student attendanceRisk ${level}`} key={s.id}>
           <div className="identity">
             {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}
-            <div className="identityMeta"><strong>{s.name}</strong><small>{cls.name}</small></div>
+            <div className="identityMeta"><strong>{s.name}</strong><small>{cls.name}</small><div className={`absenceBadge ${level}`}><span className="absenceCountNumber">{s.absence_count||0}</span><span> غیبت</span><strong>{absenceLabel(Number(s.absence_count||0))}</strong></div></div>
           </div>
           <div className="actions">
             <div className="choice">
