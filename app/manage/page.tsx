@@ -1,5 +1,6 @@
 
 import Header from "@/components/Header";
+import { absenceLevel, absenceLabel } from "@/lib/absence";
 import DeleteButton from "@/components/DeleteButton";
 import { requireUser } from "@/lib/auth";
 import { sql } from "@/lib/db";
@@ -46,7 +47,14 @@ export default async function Manage({
     }
   }
 
-  const withUrls=await Promise.all(students.map(async(s:any)=>({...s,photoUrl:await signedPhotoUrl(s.photo_path)})));
+  const withUrls=await Promise.all(students.map(async(s:any)=>{
+  const [countRow]=await sql`
+    SELECT COUNT(*)::int AS absence_count
+    FROM attendance
+    WHERE student_id=${s.id} AND status='absent'
+  `;
+  return {...s,photoUrl:await signedPhotoUrl(s.photo_path),absence_count:countRow?.absence_count||0};
+}));
   const teachers=user.role==="admin"
     ? await sql`SELECT u.*,c.name class_name FROM users u LEFT JOIN classes c ON c.id=u.class_id WHERE u.role='teacher' ORDER BY u.name`
     : [];
@@ -120,14 +128,14 @@ export default async function Manage({
 
     <section>
       <div className="head"><div><h1 style={{fontSize:20}}>دانش‌آموزان</h1><p>{withUrls.length} دانش‌آموز نمایش داده می‌شود</p></div></div>
-      <div className="photoGrid">{withUrls.map((s:any)=><div className="studentMini" key={s.id}>
+      <div className="photoGrid">{withUrls.map((s:any)=>{const level=absenceLevel(Number(s.absence_count||0)); return <div className={`studentMini attendanceRisk ${level}`} key={s.id}>
         {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}
-        <div className="miniInfo"><b>{s.name}</b><div className="muted">{s.class_name}</div></div>
+        <div className="miniInfo"><b>{s.name}</b><div className="muted">{s.class_name}</div><div className={`absenceBadge ${level}`}>غیبت: {s.absence_count||0} — {absenceLabel(Number(s.absence_count||0))}</div></div>
         <div className="miniActions">
           <Link className="btn" href={`/edit/student/${s.id}`}>ویرایش</Link>
           <DeleteButton action={`/api/students/${s.id}/delete`} message={`دانش‌آموز «${s.name}» حذف شود؟`}/>
         </div>
-      </div>)}</div>
+      </div>})}</div>
       {withUrls.length===0 && <div className="box emptyState"><div className="emptyIcon">⌕</div><b>دانش‌آموزی پیدا نشد</b><p>عبارت جستجو یا فیلتر کلاس را تغییر دهید.</p></div>}
     </section>
   </main></>;

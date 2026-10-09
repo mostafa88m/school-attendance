@@ -50,3 +50,15 @@ input:focus,select:focus{border-color:#8091f3;box-shadow:0 0 0 4px rgba(52,88,23
 .emptyState{text-align:center;padding:38px 20px!important}.emptyState p{color:var(--muted);margin-bottom:0}.emptyIcon{width:58px;height:58px;border-radius:18px;background:#eef2ff;color:#4355d7;display:grid;place-items:center;margin:0 auto 12px;font-size:29px}
 @media(max-width:850px){.filterBar{grid-template-columns:1fr 1fr}.miniActions{width:100%;margin-right:0}.studentMini{flex-wrap:wrap}}
 @media(max-width:560px){.filterBar{grid-template-columns:1fr}.miniActions .btn,.miniActions form{flex:1}.miniActions button{width:100%}}
+
+
+/* Absence warning levels */
+.attendanceRisk.low{border-right:5px solid #12b76a!important;background:linear-gradient(90deg,#ffffff,#f4fff8)}
+.attendanceRisk.medium{border-right:5px solid #f79009!important;background:linear-gradient(90deg,#ffffff,#fffaf0)}
+.attendanceRisk.high{border-right:5px solid #d92d20!important;background:linear-gradient(90deg,#ffffff,#fff5f4)}
+.absenceBadge{display:inline-block;margin-top:6px;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.absenceBadge.low,.legend.low{background:#dcfae6;color:#067647}
+.absenceBadge.medium,.legend.medium{background:#fef0c7;color:#b54708}
+.absenceBadge.high,.legend.high{background:#fee4e2;color:#b42318}
+.absenceLegend{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.legend{padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700}

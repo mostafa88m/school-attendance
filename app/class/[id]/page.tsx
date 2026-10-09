@@ -1,5 +1,6 @@
 
 import Header from "@/components/Header";
+import { absenceLevel, absenceLabel } from "@/lib/absence";
 import PrintButtons from "@/components/PrintButtons";
 import { requireUser } from "@/lib/auth";
 import { sql } from "@/lib/db";
@@ -19,7 +20,15 @@ export default async function ClassPage({params}:{params:Promise<{id:string}>}) 
   const classes=await sql`SELECT * FROM classes WHERE id=${classId}`;
   if (!classes.length) notFound();
   const cls=classes[0];
-  const students=await sql`SELECT * FROM students WHERE class_id=${classId} ORDER BY name`;
+  const students=await sql`
+  SELECT s.*,
+    COUNT(a.id) FILTER (WHERE a.status='absent')::int AS absence_count
+  FROM students s
+  LEFT JOIN attendance a ON a.student_id=s.id
+  WHERE s.class_id=${classId}
+  GROUP BY s.id
+  ORDER BY s.name
+`;
   const day=todayISO();
   const recs=await sql`
     SELECT a.student_id,a.status FROM attendance a
@@ -43,7 +52,7 @@ export default async function ClassPage({params}:{params:Promise<{id:string}>}) 
       <div className="students">
       {items.map((s:any)=>{
         const st=map.get(s.id)||"present";
-        return <div className="student" key={s.id}>
+        return const level=absenceLevel(Number(s.absence_count||0)); return <div className={`student attendanceRisk ${level}`} key={s.id}>
           <div className="identity">
             {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}
             <div className="identityMeta"><strong>{s.name}</strong><small>{cls.name}</small></div>

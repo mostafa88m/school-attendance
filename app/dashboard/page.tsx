@@ -56,7 +56,7 @@ export default async function Dashboard() {
       <div className="actions no-print"><Link className="btn primary" href="/manage">⚙ مدیریت سامانه</Link></div>
     </div>
 
-    <div className="grid">
+    <div className="absenceLegend"><span className="legend low">۰ تا ۲ غیبت</span><span className="legend medium">۳ تا ۴ غیبت</span><span className="legend high">۵ غیبت و بیشتر</span></div><div className="grid">
       {cards.map(({c,students,present,absent,recs})=><section className="card" key={c.id}>
         <div className="cardTop"><div><h2>{c.name}</h2><span className="muted">پایه {c.grade}</span></div>
           <Link className="btn soft" href={`/class/${c.id}`}>مشاهده کلاس</Link></div>
