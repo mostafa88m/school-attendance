@@ -6,6 +6,7 @@ import { sql } from "@/lib/db";
 import { todayISO, shamsi } from "@/lib/date";
 import { signedPhotoUrl } from "@/lib/blob";
 import Link from "next/link";
+import DeleteButton from "@/components/DeleteButton";
 import { redirect, notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -53,6 +54,7 @@ export default async function ClassPage({params}:{params:Promise<{id:string}>}) 
               <label><input type="radio" name={`s_${s.id}`} value="absent" defaultChecked={st==="absent"}/><span className="absent">✕ غایب</span></label>
             </div>
             <Link className="btn no-print" href={`/edit/student/${s.id}`}>ویرایش</Link>
+            <div className="no-print"><DeleteButton action={`/api/students/${s.id}/delete`} message={`دانش‌آموز «${s.name}» حذف شود؟`}/></div>
           </div>
         </div>
       })}
