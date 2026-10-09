@@ -1,5 +1,6 @@
 
 import Header from "@/components/Header";
+import AbsenceLegend from "@/components/AbsenceLegend";
 import { absenceLevel, absenceLabel } from "@/lib/absence";
 import DeleteButton from "@/components/DeleteButton";
 import { requireUser } from "@/lib/auth";
@@ -127,10 +128,11 @@ export default async function Manage({
     </section>
 
     <section>
+      <AbsenceLegend/>
       <div className="head"><div><h1 style={{fontSize:20}}>دانش‌آموزان</h1><p>{withUrls.length} دانش‌آموز نمایش داده می‌شود</p></div></div>
       <div className="photoGrid">{withUrls.map((s:any)=>{const level=absenceLevel(Number(s.absence_count||0)); return <div className={`studentMini attendanceRisk ${level}`} key={s.id}>
         {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}
-        <div className="miniInfo"><b>{s.name}</b><div className="muted">{s.class_name}</div><div className={`absenceBadge ${level}`}>غیبت: {s.absence_count||0} — {absenceLabel(Number(s.absence_count||0))}</div></div>
+        <div className="miniInfo"><b>{s.name}</b><div className="muted">{s.class_name}</div><div className={`absenceBadge ${level}`}><span className="absenceCountNumber">{s.absence_count||0}</span><span> غیبت</span><strong>{absenceLabel(Number(s.absence_count||0))}</strong></div></div>
         <div className="miniActions">
           <Link className="btn" href={`/edit/student/${s.id}`}>ویرایش</Link>
           <DeleteButton action={`/api/students/${s.id}/delete`} message={`دانش‌آموز «${s.name}» حذف شود؟`}/>

@@ -1,5 +1,6 @@
 
 import Header from "@/components/Header";
+import AbsenceLegend from "@/components/AbsenceLegend";
 import { absenceLevel, absenceLabel } from "@/lib/absence";
 import PrintButtons from "@/components/PrintButtons";
 import { requireUser } from "@/lib/auth";
@@ -47,7 +48,8 @@ export default async function ClassPage({params}:{params:Promise<{id:string}>}) 
       </div>
     </div>
 
-    <form action="/api/attendance" method="post">
+    <AbsenceLegend/>
+  <form action="/api/attendance" method="post">
       <input type="hidden" name="classId" value={classId}/>
       <div className="students">
       {items.map((s:any)=>{

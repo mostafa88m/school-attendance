@@ -52,13 +52,130 @@ input:focus,select:focus{border-color:#8091f3;box-shadow:0 0 0 4px rgba(52,88,23
 @media(max-width:560px){.filterBar{grid-template-columns:1fr}.miniActions .btn,.miniActions form{flex:1}.miniActions button{width:100%}}
 
 
-/* Absence warning levels */
-.attendanceRisk.low{border-right:5px solid #12b76a!important;background:linear-gradient(90deg,#ffffff,#f4fff8)}
-.attendanceRisk.medium{border-right:5px solid #f79009!important;background:linear-gradient(90deg,#ffffff,#fffaf0)}
-.attendanceRisk.high{border-right:5px solid #d92d20!important;background:linear-gradient(90deg,#ffffff,#fff5f4)}
-.absenceBadge{display:inline-block;margin-top:6px;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700}
-.absenceBadge.low,.legend.low{background:#dcfae6;color:#067647}
-.absenceBadge.medium,.legend.medium{background:#fef0c7;color:#b54708}
-.absenceBadge.high,.legend.high{background:#fee4e2;color:#b42318}
-.absenceLegend{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
-.legend{padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700}
+
+
+/* =========================================
+   Professional absence status UI - v4.2
+   0-2 = green | 3-4 = yellow | 5+ = red
+   ========================================= */
+
+.riskLegend{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  padding:18px 20px;
+  margin:0 0 20px;
+  background:linear-gradient(135deg,#ffffff 0%,#f8faff 100%);
+  border:1px solid #e4e7ec;
+  border-radius:18px;
+  box-shadow:0 8px 28px rgba(16,24,40,.06);
+}
+.riskLegendTitle{display:flex;flex-direction:column;gap:5px;min-width:230px}
+.riskLegendTitle b{font-size:15px;color:#101828}
+.riskLegendTitle span{font-size:12px;color:#667085;line-height:1.8}
+.riskLegendItems{display:flex;gap:10px;flex-wrap:wrap}
+.riskLegendItem{
+  min-width:155px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:13px;
+  border:1px solid transparent;
+}
+.riskLegendItem div{display:flex;flex-direction:column;gap:2px}
+.riskLegendItem b{font-size:12px}
+.riskLegendItem small{font-size:11px;opacity:.82}
+.riskDot{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.7)}
+.riskGreen{background:#ecfdf3;border-color:#abefc6;color:#067647}
+.riskGreen .riskDot{background:#12b76a}
+.riskYellow{background:#fffaeb;border-color:#fedf89;color:#b54708}
+.riskYellow .riskDot{background:#f79009}
+.riskRed{background:#fef3f2;border-color:#fecdca;color:#b42318}
+.riskRed .riskDot{background:#f04438}
+
+.attendanceRisk{
+  position:relative;
+  overflow:hidden;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.attendanceRisk:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(16,24,40,.09)!important;
+}
+.attendanceRisk::before{
+  content:"";
+  position:absolute;
+  right:0;
+  top:0;
+  bottom:0;
+  width:7px;
+}
+.attendanceRisk.low{
+  border-color:#abefc6!important;
+  background:linear-gradient(270deg,#f0fff5 0,#ffffff 36%)!important;
+}
+.attendanceRisk.low::before{background:#12b76a}
+.attendanceRisk.medium{
+  border-color:#fedf89!important;
+  background:linear-gradient(270deg,#fff9e8 0,#ffffff 36%)!important;
+}
+.attendanceRisk.medium::before{background:#f79009}
+.attendanceRisk.high{
+  border-color:#fda29b!important;
+  background:linear-gradient(270deg,#fff1f0 0,#ffffff 38%)!important;
+  box-shadow:0 8px 24px rgba(217,45,32,.08)!important;
+}
+.attendanceRisk.high::before{background:#d92d20}
+
+.absenceBadge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:7px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.absenceBadge strong{
+  margin-right:3px;
+  font-size:10px;
+  padding:2px 6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+}
+.absenceCountNumber{font-size:15px;font-weight:900;line-height:1}
+.absenceBadge.low{background:#dcfae6;color:#067647;border:1px solid #abefc6}
+.absenceBadge.medium{background:#fef0c7;color:#b54708;border:1px solid #fedf89}
+.absenceBadge.high{background:#fee4e2;color:#b42318;border:1px solid #fda29b}
+
+.studentMini.attendanceRisk{
+  min-height:92px;
+  padding:13px 15px 13px 18px;
+}
+.student.attendanceRisk{
+  padding-right:19px;
+}
+.studentMini.attendanceRisk.high b,
+.student.attendanceRisk.high .identity b{
+  color:#b42318;
+}
+.studentMini.attendanceRisk.medium b,
+.student.attendanceRisk.medium .identity b{
+  color:#93370d;
+}
+
+@media(max-width:850px){
+  .riskLegend{flex-direction:column;align-items:stretch}
+  .riskLegendTitle{min-width:0}
+  .riskLegendItems{display:grid;grid-template-columns:repeat(3,1fr)}
+  .riskLegendItem{min-width:0}
+}
+@media(max-width:600px){
+  .riskLegendItems{grid-template-columns:1fr}
+  .riskLegend{padding:14px}
+  .riskLegendItem{width:100%}
+}
