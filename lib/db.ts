@@ -44,6 +44,15 @@ export async function ensureSchema() {
         class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE
       )
     `;
+    
+    await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS national_id TEXT`;
+    await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS student_code TEXT`;
+    await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS student_phone TEXT`;
+    await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS parent_name TEXT`;
+    await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS parent_phone TEXT`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_students_national_id ON students(national_id)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_students_student_code ON students(student_code)`;
+
     await sql`
       CREATE TABLE IF NOT EXISTS attendance (
         id SERIAL PRIMARY KEY,
