@@ -1,0 +1,8 @@
+v4.4.3
+
+Vercel TypeScript fix for @vercel/blob PutBody.
+
+The ZIP entry is first extracted as Uint8Array, then explicitly converted to a
+Node.js Buffer with a declared Buffer type before calling put().
+
+This removes the ambiguous JSZip inferred type at the put() call.

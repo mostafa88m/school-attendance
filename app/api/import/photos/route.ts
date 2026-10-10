@@ -40,11 +40,18 @@ export async function POST(req:Request){
     if(!rows.length) rows=await sql`SELECT id FROM students WHERE student_code=${base} LIMIT 1`;
     if(!rows.length){unmatched++;continue;}
 
-    const bytes = await entry.async("nodebuffer");
-    if(bytes.byteLength>5*1024*1024){unmatched++;continue;}
+    const extracted = await entry.async("uint8array");
+    if(extracted.byteLength>5*1024*1024){unmatched++;continue;}
+
+    // Explicitly create a Node.js Buffer. Vercel Blob's PutBody accepts Buffer.
+    const body: Buffer = Buffer.from(
+      extracted.buffer,
+      extracted.byteOffset,
+      extracted.byteLength
+    );
 
     const mime=ext==="png"?"image/png":ext==="webp"?"image/webp":"image/jpeg";
-    const blob=await put(`students/${crypto.randomUUID()}.${ext==="jpeg"?"jpg":ext}`,bytes,{
+    const blob=await put(`students/${crypto.randomUUID()}.${ext==="jpeg"?"jpg":ext}`,body,{
       access:"private",
       addRandomSuffix:false,
       contentType:mime
