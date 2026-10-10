@@ -1,0 +1,11 @@
+v4.4.1
+Fixed Vercel TypeScript error in app/api/import/photos/route.ts
+
+Before:
+const bytes=await entry.async("uint8array");
+
+After:
+const bytes=Buffer.from(await entry.async("uint8array"));
+
+Reason:
+@vercel/blob put() accepts Buffer but not the generic Uint8Array type returned by JSZip.
