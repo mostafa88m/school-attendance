@@ -40,7 +40,7 @@ export async function POST(req:Request){
     if(!rows.length) rows=await sql`SELECT id FROM students WHERE student_code=${base} LIMIT 1`;
     if(!rows.length){unmatched++;continue;}
 
-    const bytes=Buffer.from(await entry.async("uint8array"));
+    const bytes = await entry.async("nodebuffer");
     if(bytes.byteLength>5*1024*1024){unmatched++;continue;}
 
     const mime=ext==="png"?"image/png":ext==="webp"?"image/webp":"image/jpeg";

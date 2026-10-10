@@ -1,0 +1,14 @@
+v4.4.2 - Vercel Blob / JSZip type fix
+
+Changed JSZip extraction from Uint8Array to native Node Buffer:
+
+OLD:
+const bytes = Buffer.from(await entry.async("uint8array"));
+
+NEW:
+const bytes = await entry.async("nodebuffer");
+
+Reason:
+JSZip's "nodebuffer" output is typed as Node.js Buffer directly.
+@vercel/blob put() accepts Buffer as PutBody.
+This avoids the Uint8Array<ArrayBufferLike> TypeScript incompatibility on Vercel.
