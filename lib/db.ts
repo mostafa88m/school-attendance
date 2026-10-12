@@ -50,6 +50,7 @@ export async function ensureSchema() {
     await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS student_phone TEXT`;
     await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS parent_name TEXT`;
     await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS parent_phone TEXT`;
+    await sql`ALTER TABLE students ADD COLUMN IF NOT EXISTS photo_ref TEXT`;
     await sql`CREATE INDEX IF NOT EXISTS idx_students_national_id ON students(national_id)`;
     await sql`CREATE INDEX IF NOT EXISTS idx_students_student_code ON students(student_code)`;
 

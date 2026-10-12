@@ -103,20 +103,16 @@ export default async function Manage({
 
     <section className="box section" id="student">
       <div className="sectionTitle">
-        <div><h2 style={{margin:0}}>ثبت دانش‌آموز</h2><p className="sectionDesc">عکس اختیاری است؛ می‌توانید دانش‌آموز را الان ثبت و عکس را بعداً اضافه کنید.</p></div>
+        <div><h2 style={{margin:0}}>ثبت دانش‌آموز</h2><p className="sectionDesc">فقط نام، کلاس و شماره تماس کافی است. عکس اختیاری است و بعداً هم قابل افزودن است.</p></div>
         {user.role==="admin"&&<Link className="btn importBtn no-print" href="/import-students">ورود گروهی از Excel</Link>}
       </div>
-      <form action="/api/students" method="post" encType="multipart/form-data" className="formGrid studentFormGrid">
+      <form action="/api/students" method="post" encType="multipart/form-data" className="formGrid simpleStudentForm">
         <div><label>نام و نام خانوادگی *</label><input name="name" required/></div>
-        <div><label>کد ملی</label><input name="nationalId" inputMode="numeric" maxLength={10}/></div>
-        <div><label>کد دانش‌آموزی</label><input name="studentCode"/></div>
-        <div><label>نام پدر یا مادر</label><input name="parentName"/></div>
-        <div><label>شماره تماس ولی</label><input name="parentPhone" inputMode="tel"/></div>
-        <div><label>شماره دانش‌آموز</label><input name="studentPhone" inputMode="tel"/></div>
         <div><label>کلاس *</label><select name="classId" defaultValue={allowedClassId||undefined} disabled={user.role==="teacher"}>
           {classes.map((c:any)=><option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>{user.role==="teacher" && <input type="hidden" name="classId" value={user.classId!}/>}</div>
-        <div><label>عکس دانش‌آموز <span className="optionalTag">اختیاری</span></label><input type="file" name="photo" accept="image/jpeg,image/png,image/webp"/></div>
+        </select>{user.role==="teacher"&&<input type="hidden" name="classId" value={user.classId!}/>}</div>
+        <div><label>شماره تماس</label><input name="phone" inputMode="tel" placeholder="مثلاً 09111234567"/></div>
+        <div><label>عکس <span className="optionalTag">اختیاری</span></label><input type="file" name="photo" accept="image/jpeg,image/png,image/webp"/></div>
         <button className="primary">ثبت دانش‌آموز</button>
       </form>
     </section>
@@ -139,7 +135,7 @@ export default async function Manage({
       <div className="head"><div><h1 style={{fontSize:20}}>دانش‌آموزان</h1><p>{withUrls.length} دانش‌آموز نمایش داده می‌شود</p></div></div>
       <div className="photoGrid">{withUrls.map((s:any)=>{const level=absenceLevel(Number(s.absence_count||0)); return <div className={`studentMini attendanceRisk ${level}`} key={s.id}>
         {s.photoUrl?<img src={s.photoUrl} alt=""/>:<div className="avatar">👤</div>}
-        <div className="miniInfo"><b>{s.name}</b><div className="muted">{s.class_name}{s.parent_name?` • ولی: ${s.parent_name}`:""}{s.parent_phone?` • ${s.parent_phone}`:""}</div><div className={`absenceBadge ${level}`}><span className="absenceCountNumber">{s.absence_count||0}</span><span> غیبت</span><strong>{absenceLabel(Number(s.absence_count||0))}</strong></div></div>
+        <div className="miniInfo"><b>{s.name}</b><div className="muted">{s.class_name}{s.student_phone?` • ${s.student_phone}`:""}</div><div className={`absenceBadge ${level}`}><span className="absenceCountNumber">{s.absence_count||0}</span><span> غیبت</span><strong>{absenceLabel(Number(s.absence_count||0))}</strong></div></div>
         <div className="miniActions">
           <Link className="btn" href={`/edit/student/${s.id}`}>ویرایش</Link>
           <DeleteButton action={`/api/students/${s.id}/delete`} message={`دانش‌آموز «${s.name}» حذف شود؟`}/>
