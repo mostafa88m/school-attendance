@@ -101,21 +101,7 @@ export default async function Manage({
       </table></div>}
     </section>}
 
-    <section className="box section" id="student">
-      <div className="sectionTitle">
-        <div><h2 style={{margin:0}}>ثبت دانش‌آموز</h2><p className="sectionDesc">فقط نام، کلاس و شماره تماس کافی است. عکس اختیاری است و بعداً هم قابل افزودن است.</p></div>
-        {user.role==="admin"&&<Link className="btn importBtn no-print" href="/import-students">ورود گروهی از Excel</Link>}
-      </div>
-      <form action="/api/students" method="post" encType="multipart/form-data" className="formGrid simpleStudentForm">
-        <div><label>نام و نام خانوادگی *</label><input name="name" required/></div>
-        <div><label>کلاس *</label><select name="classId" defaultValue={allowedClassId||undefined} disabled={user.role==="teacher"}>
-          {classes.map((c:any)=><option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>{user.role==="teacher"&&<input type="hidden" name="classId" value={user.classId!}/>}</div>
-        <div><label>شماره تماس</label><input name="phone" inputMode="tel" placeholder="مثلاً 09111234567"/></div>
-        <div><label>عکس <span className="optionalTag">اختیاری</span></label><input type="file" name="photo" accept="image/jpeg,image/png,image/webp"/></div>
-        <button className="primary">ثبت دانش‌آموز</button>
-      </form>
-    </section>
+    <section className="box section" id="student"><div className="sectionTitle"><div><h2 style={{margin:0}}>ثبت دانش‌آموز</h2><p className="sectionDesc">عکس اختیاری است و می‌توانید بعداً اضافه کنید.</p></div>{user.role==="admin"&&<Link className="btn importBtn no-print" href="/import-students">ورود گروهی Excel</Link>}</div><form action="/api/students" method="post" encType="multipart/form-data" className="formGrid simpleStudentForm"><div><label>نام و نام خانوادگی *</label><input name="name" required/></div><div><label>کلاس *</label><select name="classId" defaultValue={allowedClassId||undefined} disabled={user.role==="teacher"}>{classes.map((c:any)=><option key={c.id} value={c.id}>{c.name}</option>)}</select>{user.role==="teacher"&&<input type="hidden" name="classId" value={user.classId!}/>}</div><div><label>شماره تماس</label><input name="studentPhone" inputMode="tel" placeholder="09111234567"/></div><div><label>عکس <span className="optionalTag">اختیاری</span></label><input type="file" name="photo" accept="image/jpeg,image/png,image/webp"/></div><button className="primary">ثبت دانش‌آموز</button></form></section>
 
     <section className="box section">
       <div className="sectionTitle"><h2 style={{margin:0}}>جستجو و فیلتر دانش‌آموزان</h2><span className="badge">{withUrls.length} نتیجه</span></div>
