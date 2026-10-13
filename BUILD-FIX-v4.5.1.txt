@@ -1,0 +1,11 @@
+v4.5.1
+Fixed PostCSS build error in app/globals.css.
+
+Cause:
+Literal characters \n were written into CSS instead of real line breaks.
+
+Fix:
+Converted all accidental literal \n sequences to actual newline characters.
+
+Expected result:
+PostCSS can parse globals.css normally.
